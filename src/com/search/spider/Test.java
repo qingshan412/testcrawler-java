@@ -18,6 +18,7 @@ public class Test
 		
 		String url = "http://en.wikipedia.org/wiki/Bilibili";  
 	    String url1 = "https://www.google.com/search?hl=en&q=bilibili";
+	    //"http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=large&q="
 	    //"https://www.google.com/?gws_rd=ssl#newwindow=1&q=bilibili";  
 	    String url2 = "https://www.google.com/imghp?hl=en&tab=wi&ei=HobFVLulIpauyASJuoLQBg&ved=0CAQQqi4oAg";  
 	    String url3 = "https://www.google.com/?gws_rd=ssl#newwindow=1&q=" + ReqKeyWord;  
