@@ -2,10 +2,17 @@ package com.search.spider;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,12 +23,10 @@ public class FunctionUtils
 	/**
 	 * find the hyper link through regular expression
 	 */
-	private static String pat = "https://www.google\\.com/\\?gws_rd=ssl#newwindow=1&q=.*";
-			//"^https://www\\.google\\.com/?(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*((:\\d+)?)(/(\\w+(-\\w+)*))*(\\.?(\\w)*)(\\?)?(((\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*(\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*)*(\\w*)*)$";
-//"https://www\\.google\\.come/\\?gws\\_rd=ssl#newwindow=1\\&q=acfun";
-	//^(http|www|ftp|)?(://)?(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*((:\\d+)?)(/(\\w+(-\\w+)*))*(\\.?(\\w)*)(\\?)?(((\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*(\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*)*(\\w*)*)$
-	//^(http|www|ftp|)?(://)?(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*((:\\d+)?)(/(\\w+(-\\w+)*))*(\\.?(\\w)*)(\\?)?(((\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*(\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*)*(\\w*)*)$
-	//^https://www\\.google\\.com/(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*((:\\d+)?)(/(\\w+(-\\w+)*))*(\\.?(\\w)*)(\\?)?(((\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*(\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*)*(\\w*)*)$
+	private static String pat = "https://www.google\\.com/search\\?site=&tbm=isch&source=hp&biw=1855&bih=875&q=.*";
+	//https://www.google\\.com/\\?gws_rd=ssl#newwindow=1&q=.*
+	//https://www.google.com/search?site=&tbm=isch&source=hp&biw=1855&bih=875&q=
+	//"https://www\\.google\\.come/\\?gws\\_rd=ssl#newwindow=1\\&q=acfun";	//^(http|www|ftp|)?(://)?(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*((:\\d+)?)(/(\\w+(-\\w+)*))*(\\.?(\\w)*)(\\?)?(((\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*(\\w*%)*(\\w*\\?)*(\\w*:)*(\\w*\\+)*(\\w*\\.)*(\\w*&)*(\\w*-)*(\\w*=)*)*(\\w*)*)$
 
 	private static Pattern pattern = Pattern.compile(pat);
 	
@@ -66,29 +71,60 @@ public class FunctionUtils
 	 * 
 	 * @param content
 	 * @param urlPath
+	 * @throws IOException 
 	 */
-	public static void createFile(String content, String urlPath)
+	public static void createFile(String content, String urlPath) throws IOException
 	{
-		/*divide url*/
-		String[] elems = divUrl(urlPath);
-		StringBuffer path = new StringBuffer();
+		/*divide urlsrc=\"|*/
+		String[] elems = content.split("\"");
 		
-		File file = null;
-		for (int i = 1; i < elems.length; i++)
+		/**
+		 * used for debug
+		 */
+		System.out.println(urlPath);
+		System.out.println(elems.length);
+		
+		//StringBuffer path = new StringBuffer();
+		
+		//File file = null; 
+		int j=0;
+		for (int i = 0; i < elems.length; i++)
 		{
-			if (i != elems.length -1)
+			if (!elems[i].equals("src="))
 			{
-				path.append(elems[i]);
-				path.append(File.separator);
-				file = new File("/home/qs/tmp"+File.separator+path.toString());
+				j++;
+				System.out.println(elems[i]);
+				URL url = new URL(elems[i]);
+				File outFile = new File("/home/qs/Documents/Data/2015SP/Pic/" + j +".jpg");
+				OutputStream os = new FileOutputStream(outFile);
+				InputStream is = url.openStream();
+				byte[] buff = new byte[1024];
+				while(true) 
+				{
+					int readed = is.read(buff);
+					if(readed == -1) 
+					{
+						break;
+					}
+					byte[] temp = new byte[readed];
+					System.arraycopy(buff, 0, temp, 0, readed);
+					os.write(temp);
+				}
+				is.close(); 
+                os.close();
 			}
-			
-			if (i == elems.length - 1)
+		}
+			/*if (i == elems.length - 1)
 			{
 				Pattern pattern = Pattern.compile("\\w+\\.[a-zA-Z]");
 				Matcher matcher = pattern.matcher(elems[i]);
 				if (matcher.matches())
 				{
+					/**
+					 * used for debug
+					 *//*
+					System.out.println("matches!");
+					
 					if (!file.exists())
 					{
 						file.mkdirs();
@@ -110,7 +146,7 @@ public class FunctionUtils
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	/**
@@ -148,13 +184,62 @@ public class FunctionUtils
 	 */
 	public static String getGoalContent(String content)
 	{
-		int sign = content.indexOf("<pre class=\"");
+		/** 
+		 * used for debug
+		 */  
+		
+		String s = "";
+		Pattern p = Pattern.compile("<img .*?>");
+		Matcher m = p.matcher(content);
+		List<String> result=new ArrayList<String>();
+		while(m.find())
+		{
+			result.add(m.group());
+		}
+		for(String s1:result)
+		{
+			//System.out.println(s1);
+			s = s + s1;
+		}
+		
+		p = Pattern.compile("src=.+?\"");
+		Matcher mt = p.matcher(s);
+		String t="";
+		List<String> resultt=new ArrayList<String>();
+		while(mt.find())
+		{
+			resultt.add(mt.group());
+		}
+		for(String s1:resultt)
+		{
+			System.out.println(s1);
+			t = t + s1;
+		}
+		
+		/**
+		 * used for debug
+		 */
+		System.out.println(t);
+		
+		return t;
+		
+		/*int sign = content.indexOf("<a class=\"");
 		String signContent  = content.substring(sign);
 		
-		int start = signContent.indexOf(">");
-		int end = signContent.indexOf("</pre>");
 		
-		return signContent.substring(start+1, end);
+		System.out.println(signContent);
+		
+		int start = signContent.indexOf(">");
+		//int end = signContent.indexOf("</pre>");
+		
+		/**
+		 * used for debug
+		 */
+		/*int end = signContent.indexOf("</a>");
+		System.out.println(start + " " + end);
+		System.out.println(signContent.substring(start+1, end));
+		
+		return signContent.substring(start+1, end);*/
 	}
 	
 	/**
@@ -168,10 +253,10 @@ public class FunctionUtils
 		/**
 		 * used for debug
 		 */
-		int tmp = content.indexOf("<pre class=\"");
+		int tmp = content.indexOf("<img ");
 		System.out.println(tmp);
 		
-		return content.indexOf("<pre class=\"");
+		return content.indexOf("<img ");
 	}
 	
 }

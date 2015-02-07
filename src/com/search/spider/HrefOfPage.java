@@ -7,8 +7,8 @@ public class HrefOfPage
 	 */
 	public static void getHrefOfContent(String content)
 	{
-		System.out.println("start");
-		String[] contents = content.split("<a href=\"");
+		System.out.println("finished");
+		/*String[] contents = content.split("<a href=\"");
 		for (int i = 1; i < contents.length; i++)
 		{
 			int endHref = contents[i].indexOf("\"");
@@ -29,5 +29,6 @@ public class HrefOfPage
 		
 		System.out.println(UrlQueue.size() + "--number of links catched");
 		System.out.println(VisitedUrlQueue.size() + "--number of webpages processed");
+	*/
 	}
 }

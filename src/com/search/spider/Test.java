@@ -16,16 +16,19 @@ public class Test
 		String ReqKeyWord = sc.nextLine();
 		sc.close();
 		
-		String url = "http://en.wikipedia.org/wiki/Bilibili";  
+		/*String url = "http://en.wikipedia.org/wiki/Bilibili";  
 	    String url1 = "https://www.google.com/search?hl=en&q=bilibili";
-	    //"http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=large&q="
+	    //"https://www.google.com/?gws_rd=ssl#newwindow=1&q="
+	    //acfun
 	    //"https://www.google.com/?gws_rd=ssl#newwindow=1&q=bilibili";  
+	    //"http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=large&q="
 	    String url2 = "https://www.google.com/imghp?hl=en&tab=wi&ei=HobFVLulIpauyASJuoLQBg&ved=0CAQQqi4oAg";  
-	    String url3 = "https://www.google.com/?gws_rd=ssl#newwindow=1&q=" + ReqKeyWord;  
+	    
 	           
 	    UrlQueue.addElem(url);
 	    UrlQueue.addElem(url1);
-	    UrlQueue.addElem(url2);
+	    UrlQueue.addElem(url2);*/
+	    String url3 = "https://www.google.com/search?site=&tbm=isch&source=hp&biw=1855&bih=875&q=" + ReqKeyWord;  
 	    UrlQueue.addElem(url3);       
 	           
 	    //UrlDataHanding[] url_Handings = new UrlDataHanding[4];  
