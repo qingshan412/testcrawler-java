@@ -79,7 +79,7 @@ public class FunctionUtils
 	 * @param urlPath
 	 * @throws Exception 
 	 */
-	public static void createFile(String content, String urlPath) throws Exception
+	public static void createFile(String content, String ReqKeyWord) throws Exception
 	{
 		/*divide urlsrc=\"|*/
 		String[] elems = content.split("\"");
@@ -87,7 +87,7 @@ public class FunctionUtils
 		/**
 		 * used for debug
 		 */
-		System.out.println(urlPath);
+		System.out.println(ReqKeyWord);
 		System.out.println(elems.length);
 		
 		//StringBuffer path = new StringBuffer();
@@ -109,7 +109,13 @@ public class FunctionUtils
 				
 				String Suffix = getSuffix(is);
 				
-				File outFile = new File("/home/qs/Documents/Data/2015SP/Pic/" + j + Suffix);
+				File file = new File("/home/qs/Documents/Data/2015SP/Pic/" + ReqKeyWord);
+				if (!file.exists()) 
+                { 
+                    file.mkdirs(); 
+                }
+				
+				File outFile = new File("/home/qs/Documents/Data/2015SP/Pic/" + ReqKeyWord + File.separator + j + Suffix);
 				OutputStream os = new FileOutputStream(outFile);
 				
 				is.close(); 

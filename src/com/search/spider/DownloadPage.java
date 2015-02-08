@@ -22,7 +22,7 @@ public class DownloadPage
 	 * @throws Exception 
 	 */
 	
-	public static String getContentFromUrl(String url) throws Exception 
+	public static String getContentFromUrl(String url, String KeyWord) throws Exception 
 	{
 		/*initialize an HttpClient client end*/
 		@SuppressWarnings("resource")
@@ -60,7 +60,7 @@ public class DownloadPage
 				if (FunctionUtils.isCreateFile(url)
 						&& FunctionUtils.isHasGoalContent(content) != -1) 
 				{
-					FunctionUtils.createFile(FunctionUtils.getGoalContent(content), url);
+					FunctionUtils.createFile(FunctionUtils.getGoalContent(content), KeyWord);
 				}
 				
 			}

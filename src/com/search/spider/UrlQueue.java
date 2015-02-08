@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class UrlQueue 
 { 
 	    /**超链接队列*/
-	    public static LinkedList<String> urlQueue = new LinkedList<String>(); 
+	    public static LinkedList<String> urlQueue = new LinkedList<String>();
 	         
 	    /**队列中对应最多的超链接数量*/
 	    public static final int MAX_SIZE = 10000; 

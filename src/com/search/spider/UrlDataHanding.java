@@ -8,14 +8,14 @@ public class UrlDataHanding implements Runnable
 	 */
 	public static int i = 0;
 	
-	public void dataHanding(String url) throws Exception
+	public void dataHanding(String url, String KeyWord) throws Exception
 	{
 		/**
 		 * used for debug
 		 */
 		System.out.println("it is dataHading now");
 		
-		HrefOfPage.getHrefOfContent(DownloadPage.getContentFromUrl(url));
+		HrefOfPage.getHrefOfContent(DownloadPage.getContentFromUrl(url, KeyWord));
 	}
 	
 	public void run()
@@ -30,7 +30,7 @@ public class UrlDataHanding implements Runnable
 			
 			try
 			{
-				dataHanding(UrlQueue.outElem());
+				dataHanding(UrlQueue.outElem(), ReqKeyWordQueue.outElem());
 			} catch (Exception e)
 			{
 				// TODO Auto-generated catch block

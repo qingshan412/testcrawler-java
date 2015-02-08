@@ -29,7 +29,8 @@ public class Test
 	    UrlQueue.addElem(url1);
 	    UrlQueue.addElem(url2);*/
 	    String url3 = "https://www.google.com/search?site=&tbm=isch&source=hp&biw=1855&bih=875&q=" + ReqKeyWord;  
-	    UrlQueue.addElem(url3);       
+	    UrlQueue.addElem(url3);
+	    ReqKeyWordQueue.addElem(ReqKeyWord);
 	           
 	    //UrlDataHanding[] url_Handings = new UrlDataHanding[4];  
 	    UrlDataHanding url_Handings = new UrlDataHanding();  
