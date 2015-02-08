@@ -8,7 +8,7 @@ public class UrlDataHanding implements Runnable
 	 */
 	public static int i = 0;
 	
-	public void dataHanding(String url)
+	public void dataHanding(String url) throws Exception
 	{
 		/**
 		 * used for debug
@@ -28,7 +28,14 @@ public class UrlDataHanding implements Runnable
 			i++;
 			System.out.println("it is running for the " + i +" time");
 			
-			dataHanding(UrlQueue.outElem());
+			try
+			{
+				dataHanding(UrlQueue.outElem());
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

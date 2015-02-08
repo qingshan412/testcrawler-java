@@ -19,9 +19,10 @@ public class DownloadPage
 	 * 
 	 * @param url
 	 * @return
+	 * @throws Exception 
 	 */
 	
-	public static String getContentFromUrl(String url) 
+	public static String getContentFromUrl(String url) throws Exception 
 	{
 		/*initialize an HttpClient client end*/
 		@SuppressWarnings("resource")

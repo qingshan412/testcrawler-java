@@ -12,11 +12,17 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.devlib.schmidt.imageinfo.ImageInfo;
 
 public class FunctionUtils 
 {
@@ -71,9 +77,9 @@ public class FunctionUtils
 	 * 
 	 * @param content
 	 * @param urlPath
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public static void createFile(String content, String urlPath) throws IOException
+	public static void createFile(String content, String urlPath) throws Exception
 	{
 		/*divide urlsrc=\"|*/
 		String[] elems = content.split("\"");
@@ -94,10 +100,21 @@ public class FunctionUtils
 			{
 				j++;
 				System.out.println(elems[i]);
+				
+				//System.out.println(getFormatName(new File(elems[i])));
+				
 				URL url = new URL(elems[i]);
-				File outFile = new File("/home/qs/Documents/Data/2015SP/Pic/" + j +".jpg");
-				OutputStream os = new FileOutputStream(outFile);
+				
 				InputStream is = url.openStream();
+				
+				String Suffix = getSuffix(is);
+				
+				File outFile = new File("/home/qs/Documents/Data/2015SP/Pic/" + j + Suffix);
+				OutputStream os = new FileOutputStream(outFile);
+				
+				is.close(); 
+				is = url.openStream();
+				
 				byte[] buff = new byte[1024];
 				while(true) 
 				{
@@ -110,44 +127,45 @@ public class FunctionUtils
 					System.arraycopy(buff, 0, temp, 0, readed);
 					os.write(temp);
 				}
+				
 				is.close(); 
                 os.close();
 			}
 		}
-			/*if (i == elems.length - 1)
-			{
-				Pattern pattern = Pattern.compile("\\w+\\.[a-zA-Z]");
-				Matcher matcher = pattern.matcher(elems[i]);
-				if (matcher.matches())
-				{
-					/**
-					 * used for debug
-					 *//*
-					System.out.println("matches!");
-					
-					if (!file.exists())
-					{
-						file.mkdirs();
-					}
-					String[] fileName = elems[i].split("\\.");
-					file = new File("/home/qs/tmp"+File.separator+path.toString()+file.separator+fileName[0]+".txt");
-					try
-					{
-						file.createNewFile();
-						writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-						writer.write(content);
-						writer.flush();
-						writer.close();
-						System.out.println("create file successfully!");
-					} catch (IOException e)
-					{
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				}
-			}
-		}*/
 	}
+	
+	
+	public static String getSuffix(InputStream in)
+	{
+		
+		ImageInfo ii = new ImageInfo();
+		ii.setInput(in); // in can be InputStream or RandomAccessFile
+		ii.setDetermineImageNumber(true); // default is false
+		ii.setCollectComments(true); // default is false
+		if (!ii.check()) 
+		{
+		   System.err.println("Not a supported image file format.");
+		   return " ";
+		 }
+		 String FormatName = ii.getFormatName();
+		 String Suffix = "";
+		 switch (FormatName)
+		{
+		case "JPEG":
+			Suffix = ".jpg";
+			break;
+		case "PNG":
+			Suffix = ".png";
+			break;
+		default:
+			Suffix = "." + FormatName;
+			System.out.println(FormatName);
+			break;
+		}
+		 return Suffix;
+	}
+	
+	
 	
 	/**
 	 * get webpage's hyperlink and turn it into tags
@@ -223,23 +241,6 @@ public class FunctionUtils
 		
 		return t;
 		
-		/*int sign = content.indexOf("<a class=\"");
-		String signContent  = content.substring(sign);
-		
-		
-		System.out.println(signContent);
-		
-		int start = signContent.indexOf(">");
-		//int end = signContent.indexOf("</pre>");
-		
-		/**
-		 * used for debug
-		 */
-		/*int end = signContent.indexOf("</a>");
-		System.out.println(start + " " + end);
-		System.out.println(signContent.substring(start+1, end));
-		
-		return signContent.substring(start+1, end);*/
 	}
 	
 	/**
